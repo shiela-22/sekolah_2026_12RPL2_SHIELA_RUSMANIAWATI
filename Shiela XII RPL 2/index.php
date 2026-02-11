@@ -1,14 +1,24 @@
+<?php
+session_start();
+
+// Cek apakah user sudah login
+if(!isset($_SESSION['username'])){
+    header("Location: login.php");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>"SELAMAT DATANG DI WEBSITE PENGADUAN MUTU"</title>
+    <title>SELAMAT DATANG DI WEBSITE PENGADUAN MUTU</title>
     <style>
         body{
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(to right, #94c2ff, #fa90b0);
+            font-family: 'Quicksand';
+            background: linear-gradient(to right, #ffbece, #ffffff);
             height: 100vh;
             display: flex;
             justify-content: center;
@@ -32,11 +42,14 @@
             display: inline-block;
             margin: 15px 10px;
             padding: 12px 30px;
-            background: #92b8ff;
+            background: #ffb5da;
             color: white;
             text-decoration: none;
             border-radius: 6px;
             font-weight: bold;
+        }
+        .btn:hover{
+            background: #ff91c8;
         }
     </style>
 </head>
@@ -46,8 +59,10 @@
 <div class="box">
     <h1>SELAMAT DATANG</h1>
     <p>DI WEBSITE PENGADUAN MUTU</p>
-    <a href="login.php" class="btn">Login</a>
+    <p>Halo, <b><?php echo $_SESSION['username']; ?></b></p>
+
     <a href="form-pengaduan.php" class="btn">Buat Pengaduan</a>
+    <a href="logout-pengaduan.php" class="btn">Logout</a>
 </div>
 
 </body>

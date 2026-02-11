@@ -5,14 +5,14 @@
     <title>Form Pengaduan Mutu Sekolah</title>
     <style>
         body{
-            font-family: Arial, sans-serif;
+            font-family: 'Quicksand';
             background: #f4f4f4;
             padding: 20px;
         }
         .container{
             background: #fff;
             padding: 30px;
-            max-width: 500px;
+            max-width: 300px;
             margin: auto;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.2);
