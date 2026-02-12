@@ -62,7 +62,9 @@ if(!isset($_SESSION['username'])){
     <p>Halo, <b><?php echo $_SESSION['username']; ?></b></p>
 
     <a href="form-pengaduan.php" class="btn">Buat Pengaduan</a>
-    <a href="logout-pengaduan.php" class="btn">Logout</a>
+    <a href="cari-pengaduan.php" class="btn">Cari Pengaduan</a>
+
+    <a href="logout-pengaduan.php" class="btn">Login</a>
 </div>
 
 </body>
