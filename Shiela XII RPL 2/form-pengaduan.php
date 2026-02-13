@@ -7,12 +7,12 @@
        /* RESET */
 * {
     box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, sans-serif;
+    font-family: 'Quicksand';
 }
 
 /* BODY */
 body {
-    background: linear-gradient(to right, #e2e2e2, #d4bfcc);
+    background: linear-gradient(to right, #ffffff, #ffbbd5);
     min-height: 100vh;
     margin: 0;
     padding: 40px;
@@ -110,7 +110,7 @@ button:first-of-type:hover {
 </head>
 <body>
     <h1>Form Pengaduan Sarana Sekolah</h1>
-<form action="proses_pengaduan.php" method="POST"> 
+<form action="proses-pengaduan.php" method="POST"> 
 <div>
     <label for="">nis</label> <br />
     <input type="text" name="nis" />

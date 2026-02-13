@@ -13,6 +13,6 @@ echo "Keterangan: $keterangan <br>";
 
 
 $koneksi = mysqli_connect("localhost","root","","ujikom_12rpl2_shiela_rusmaniawat");
-mysqli_query($koneksi,"INSERT INTO `input_aspirasi` (`id_pelaporan`, `nis`, `id_kategori`, `lokasi`, `ket`, `status`, `feedback`) 
+mysqli_query($koneksi,"INSERT INTO `input_anspirasi` (`id_pelaporan`, `nis`, `id_kategori`, `lokasi`, `ket`, `status`, `feedback`) 
 VALUES (NULL, '$nis','$kategori','$lokasi', '$keterangan', 'menunggu', NULL)");
 ?>
