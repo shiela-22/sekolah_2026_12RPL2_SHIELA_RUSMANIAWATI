@@ -23,7 +23,7 @@ if ($role == 'admin' && isset($_POST['simpan'])) {
     $feedback = $_POST['feedback'];
 
     mysqli_query($koneksi, "
-        UPDATE input_anspirasi 
+        UPDATE input_aspirasi 
         SET status='$status', feedback='$feedback' 
         WHERE id_pelaporan='$id'
     ");
@@ -35,11 +35,11 @@ if ($role == 'admin' && isset($_POST['simpan'])) {
 
 // ================== AMBIL DATA ==================
 $query = mysqli_query($koneksi, "
-    SELECT input_anspirasi.*, kategori.ket_kategori
-    FROM input_anspirasi
+    SELECT input_aspirasi.*, kategori.ket_kategori
+    FROM input_aspirasi
     LEFT JOIN kategori
-        ON input_anspirasi.id_kategori = kategori.id_kategori
-    WHERE input_anspirasi.id_pelaporan = '$id'
+        ON input_aspirasi.id_kategori = kategori.id_kategori
+    WHERE input_aspirasi.id_pelaporan = '$id'
 ");
 
 $data = mysqli_fetch_assoc($query);
