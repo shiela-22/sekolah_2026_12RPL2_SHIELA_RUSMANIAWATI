@@ -95,7 +95,7 @@ if (!$data) {
         <td>
             <?php if ($role == 'admin') { ?>
                 <select name="status">
-                    <option value="menunggu" <?= ($data['status']=='menunggu')?'selected':'' ?>>Menunggu</option>
+                    <option value="Menunggu" <?= ($data['status']=='Menunggu')?'selected':'' ?>>Menunggu</option>
                     <option value="proses" <?= ($data['status']=='proses')?'selected':'' ?>>Proses</option>
                     <option value="selesai" <?= ($data['status']=='selesai')?'selected':'' ?>>Selesai</option>
                 </select>

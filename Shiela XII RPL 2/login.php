@@ -11,7 +11,7 @@ if(isset($_POST['login'])){
     if($username == "admin" && $password == "12345"){
         $_SESSION['username'] = $username;
         $_SESSION['role']     = "admin";
-        header("Location: dashboard.php");
+        header("Location: index.php");
         exit();
     }
 
@@ -28,6 +28,7 @@ if(isset($_POST['login'])){
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>

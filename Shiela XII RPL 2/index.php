@@ -129,19 +129,26 @@ a.button-link:hover {
     <p>Halo, <b><?= htmlspecialchars($_SESSION['username']); ?></b></p>
     <p>Login sebagai: <b><?= strtoupper(htmlspecialchars($_SESSION['role'])); ?></b></p>
 
-    <?php if($_SESSION['role'] == "admin"){ ?>
-        <p>Menu Admin:</p>
-            <a href="?datasiswa.php" class="button-link">data siswa</a>
-        <a href="datasiswa-pengaduan.php" class="button-link">Datasiswa Pengaduan</a>
 
+        <?php if($_SESSION['role'] == "admin"){ ?>
+    <p>Menu Admin:</p>
+    <div class="button-container">
+        <a href="data-pengaduan.php" class="button-link">Data Pengaduan admin</a>
+        <a href="datasiswa.php" class="button-link">Data siswa</a>
         <a href="cari-pengaduan.php" class="button-link">cari Data Pengaduan</a>
-    <?php } ?>
+    </div>
+<?php } ?>
 
-    <?php if($_SESSION['role'] == "siswa"){ ?>
-        <p>Menu Siswa:</p>
+<?php if($_SESSION['role'] == "siswa"){ ?>
+    <p>Menu Siswa:</p>
+    <div class="button-container">
         <a href="form-pengaduan.php" class="button-link">Buat Pengaduan</a>
+        <a href="data-pengaduan.php" class="button-link">Data Pengaduan siswa</a>
+
         <a href="cari-pengaduan.php" class="button-link">cari Pengaduan Saya</a>
-    <?php } ?>
+    </div>
+<?php } ?>
+
 <a href="?logout=true" class="button-link logout-link">Logout</a>
 
 <?php } ?>
