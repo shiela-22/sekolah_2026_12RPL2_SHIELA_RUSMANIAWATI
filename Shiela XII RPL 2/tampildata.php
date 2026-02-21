@@ -55,11 +55,24 @@ while ($data = mysqli_fetch_assoc($query)) {
 
         <?php if ($role == 'admin') { ?>
         <td>
+            <!-- Detail -->
             <a href="detail-pengaduan.php?id=<?= $data['id_pelaporan']; ?>">
                 <button>Detail</button>
             </a>
+
+            <!-- Edit -->
+            <a href="edit-pengaduan.php?id=<?= $data['id_pelaporan']; ?>">
+                <button>Edit</button>
+            </a>
+
+            <!-- Delete -->
+            <a href="delete-pengaduan.php?id=<?= $data['id_pelaporan']; ?>"
+               onclick="return confirm('Yakin ingin menghapus data ini?')">
+                <button>Delete</button>
+            </a>
         </td>
         <?php } ?>
+
     </tr>
 
 <?php } ?>

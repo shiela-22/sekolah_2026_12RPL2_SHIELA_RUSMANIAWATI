@@ -134,6 +134,7 @@ a.button-link:hover {
     <p>Menu Admin:</p>
     <div class="button-container">
         <a href="data-pengaduan.php" class="button-link">Data Pengaduan admin</a>
+        <a href="tampildata.php" class="button-link">tampil data admin</a>
         <a href="datasiswa.php" class="button-link">Data siswa</a>
         <a href="cari-pengaduan.php" class="button-link">cari Data Pengaduan</a>
     </div>
@@ -144,7 +145,6 @@ a.button-link:hover {
     <div class="button-container">
         <a href="form-pengaduan.php" class="button-link">Buat Pengaduan</a>
         <a href="data-pengaduan.php" class="button-link">Data Pengaduan siswa</a>
-
         <a href="cari-pengaduan.php" class="button-link">cari Pengaduan Saya</a>
     </div>
 <?php } ?>
