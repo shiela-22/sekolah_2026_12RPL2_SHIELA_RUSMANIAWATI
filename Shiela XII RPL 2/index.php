@@ -1,25 +1,27 @@
 <?php
 session_start();
+$conn = mysqli_connect("localhost","root","","ujikom_12rpl2_shiela_rusmaniawat");
+
+if(!$conn){
+    die("Koneksi gagal: " . mysqli_connect_error());
+}
 
 /* =========================
-   PROSES LOGIN
+   LOGIN PROSES
 ========================= */
 if(isset($_POST['login'])){
 
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    // LOGIN SEDERHANA (tanpa database)
+    $query = mysqli_query($conn,"SELECT * FROM user WHERE username='$username'");
+    $data = mysqli_fetch_assoc($query);
 
-    if($username == "admin" && $password == "12345"){
-        $_SESSION['username'] = "admin";
-        $_SESSION['role']     = "admin";
-    }
-    elseif($username == "siswa" && $password == "12345"){
-        $_SESSION['username'] = "siswa";
-        $_SESSION['role']     = "siswa";
-    }
-    else{
+    if($data && password_verify($password,$data['password'])){
+        $_SESSION['id']       = $data['id'];
+        $_SESSION['username'] = $data['username'];
+        $_SESSION['role']     = $data['role'];
+    }else{
         $error = "Username atau Password salah!";
     }
 }
@@ -33,7 +35,6 @@ if(isset($_GET['logout'])){
     exit();
 }
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -60,7 +61,6 @@ input{
     width:100%;
     padding:10px;
     margin:8px 0;
-    box-sizing: border-box;
 }
 button{
     padding:10px;
@@ -71,32 +71,25 @@ button{
     cursor:pointer;
     font-size:16px;
 }
-a.button-link {
-    display:inline-block;
-    padding:12px 20px;
+a.button-link{
+    display:block;
+    padding:10px;
     background:#ff69b4;
     color:#fff;
     text-decoration:none;
     border-radius:5px;
-    margin:10px 0;
-    font-weight: bold;
-    cursor: pointer;
+    margin:8px 0;
+    font-weight:bold;
 }
-a.button-link:hover {
+a.button-link:hover{
     background:#e04897;
 }
-.logout-link {
+.logout{
     background:#e74c3c !important;
-    margin-top: 20px;
-    display: inline-block;
 }
-.logout-link:hover {
-    background:#c0392b !important;
-}
-.error {
-    color: red;
-    margin-bottom: 15px;
-    font-weight: bold;
+.error{
+    color:red;
+    margin-bottom:10px;
 }
 </style>
 </head>
@@ -104,7 +97,7 @@ a.button-link:hover {
 
 <div class="box">
 
-<?php if(!isset($_SESSION['username'])){ ?>
+<?php if(!isset($_SESSION['id'])){ ?>
 
     <!-- FORM LOGIN -->
     <h2>Login</h2>
@@ -112,44 +105,35 @@ a.button-link:hover {
     <?php if(isset($error)) echo "<p class='error'>$error</p>"; ?>
 
     <form method="POST">
-        <input type="text" name="username" placeholder="Username" required autofocus>
+        <input type="text" name="username" placeholder="Username" required>
         <input type="password" name="password" placeholder="Password" required>
         <button type="submit" name="login">Login</button>
     </form>
-
-    <p style="font-size:12px; margin-top:15px;">
-        Admin → username: <b>admin</b> | password: <b>12345</b><br>
-        Siswa → username: <b>siswa</b> | password: <b>12345</b>
-    </p>
 
 <?php } else { ?>
 
     <!-- DASHBOARD -->
     <h2>Selamat Datang</h2>
     <p>Halo, <b><?= htmlspecialchars($_SESSION['username']); ?></b></p>
-    <p>Login sebagai: <b><?= strtoupper(htmlspecialchars($_SESSION['role'])); ?></b></p>
+    <p>Login sebagai: <b><?= strtoupper($_SESSION['role']); ?></b></p>
 
+    <?php if($_SESSION['role'] == "admin"){ ?>
+        <p><b>Menu Admin:</b></p>
+        <a href="data-pengaduan.php" class="button-link">Data Pengaduan</a>
+        <a href="editpassword-pengaduan.php" class="button-link">edit password</a>
+        <a href="tampildata.php" class="button-link">Tampil Data</a>
+        <a href="datasiswa.php" class="button-link">Data Siswa</a>
+        <a href="cari-pengaduan.php" class="button-link">Cari Pengaduan</a>
+    <?php } ?>
 
-        <?php if($_SESSION['role'] == "admin"){ ?>
-    <p>Menu Admin:</p>
-    <div class="button-container">
-        <a href="data-pengaduan.php" class="button-link">Data Pengaduan admin</a>
-        <a href="tampildata.php" class="button-link">tampil data admin</a>
-        <a href="datasiswa.php" class="button-link">Data siswa</a>
-        <a href="cari-pengaduan.php" class="button-link">cari Data Pengaduan</a>
-    </div>
-<?php } ?>
-
-<?php if($_SESSION['role'] == "siswa"){ ?>
-    <p>Menu Siswa:</p>
-    <div class="button-container">
+    <?php if($_SESSION['role'] == "siswa"){ ?>
+        <p><b>Menu Siswa:</b></p>
         <a href="form-pengaduan.php" class="button-link">Buat Pengaduan</a>
-        <a href="data-pengaduan.php" class="button-link">Data Pengaduan siswa</a>
-        <a href="cari-pengaduan.php" class="button-link">cari Pengaduan Saya</a>
-    </div>
-<?php } ?>
+        <a href="data-pengaduan.php" class="button-link">Data Pengaduan</a>
+        <a href="cari-pengaduan.php" class="button-link">Cari Pengaduan Saya</a>
+    <?php } ?>
 
-<a href="?logout=true" class="button-link logout-link">Logout</a>
+    <a href="?logout=true" class="button-link logout">Logout</a>
 
 <?php } ?>
 
