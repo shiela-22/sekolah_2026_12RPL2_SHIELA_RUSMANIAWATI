@@ -1,7 +1,14 @@
 <?php
 session_start();
-include 'koneksi.php';
 
+/* ================== KONEKSI DATABASE ================== */
+$koneksi = mysqli_connect("localhost","root","","ujikom_12rpl2_shiela_rusmaniawat");
+
+if (!$koneksi) {
+    die("Koneksi gagal: " . mysqli_connect_error());
+}
+
+/* ================== CEK LOGIN ================== */
 if (!isset($_SESSION['role'])) {
     echo "Akses ditolak!";
     exit;
@@ -9,12 +16,24 @@ if (!isset($_SESSION['role'])) {
 
 $role = $_SESSION['role'];
 $no = 1;
+
+/* ================== AMBIL DATA ================== */
+$query = mysqli_query($koneksi, "
+    SELECT input_aspirasi.*, kategori.ket_kategori
+    FROM input_aspirasi
+    LEFT JOIN kategori
+        ON input_aspirasi.id_kategori = kategori.id_kategori
+    ORDER BY input_aspirasi.id_pelaporan DESC
+");
+
+if (!$query) {
+    die("Query error: " . mysqli_error($koneksi));
+}
 ?>
 
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
-    <meta charset="UTF-8">
     <title>Data Pengaduan</title>
 </head>
 <body>
@@ -22,72 +41,56 @@ $no = 1;
 <h2>Data Pengaduan</h2>
 
 <table border="1" cellpadding="10" cellspacing="0">
-    <tr>
-        <th>No</th>
-        <th>ID Kategori</th>
-        <th>Nama Kategori</th>
-        <th>Lokasi</th>
-        <th>Keterangan</th>
-        <th>Status</th>
-        <?php if ($role == 'admin') { ?>
-            <th>Aksi</th>
-        <?php } ?>
-    </tr>
+<tr>
+    <th>No</th>
+    <th>ID Kategori</th>
+    <th>Nama Kategori</th>
+    <th>Lokasi</th>
+    <th>Keterangan</th>
+    <th>Status</th>
+    <?php if ($role == 'admin') { ?>
+        <th>Aksi</th>
+    <?php } ?>
+</tr>
 
-<?php
-$query = mysqli_query($koneksi, "
-    SELECT input_aspirasi.*, kategori.ket_kategori
-    FROM input_aspirasi
-    LEFT JOIN kategori
-        ON input_aspirasi.id_kategori = kategori.id_kategori
-");
-
-while ($data = mysqli_fetch_assoc($query)) {
+<?php while ($data = mysqli_fetch_assoc($query)) { 
+    // cegah NULL (anti deprecated)
+    $data = array_map(function($v){ return $v ?? ''; }, $data);
 ?>
+<tr>
+    <td><?= $no++; ?></td>
+    <td><?= htmlspecialchars($data['id_kategori']); ?></td>
+    <td><?= htmlspecialchars($data['ket_kategori']); ?></td>
+    <td><?= htmlspecialchars($data['lokasi']); ?></td>
+    <td><?= htmlspecialchars($data['ket']); ?></td>
+    <td><?= ucfirst(htmlspecialchars($data['status'])); ?></td>
 
-    <tr>
-        <td><?= $no++; ?></td>
-        <td><?= $data['id_kategori']; ?></td>
-        <td><?= $data['ket_kategori']; ?></td>
-        <td><?= $data['lokasi']; ?></td>
-        <td><?= $data['ket']; ?></td>
-        <td><?= ucfirst($data['status']); ?></td>
+    <?php if ($role == 'admin') { ?>
+    <td>
+        <a href="detail-pengaduan.php?id=<?= $data['id_pelaporan']; ?>">
+            <button type="button">Detail</button>
+        </a>
 
-        <?php if ($role == 'admin') { ?>
-        <td>
-            <!-- Detail -->
-            <a href="detail-pengaduan.php?id=<?= $data['id_pelaporan']; ?>">
-                <button>Detail</button>
-            </a>
+        <a href="edit-pengaduan.php?id=<?= $data['id_pelaporan']; ?>">
+            <button type="button">Edit</button>
+        </a>
 
-            <!-- Edit -->
-            <a href="edit-pengaduan.php?id=<?= $data['id_pelaporan']; ?>">
-                <button>Edit</button>
-            </a>
+        <a href="delete-pengaduan.php?id=<?= $data['id_pelaporan']; ?>"
+           onclick="return confirm('Yakin ingin menghapus data ini?')">
+            <button type="button">Delete</button>
+        </a>
+    </td>
+    <?php } ?>
 
-            <!-- Delete -->
-            <a href="delete-pengaduan.php?id=<?= $data['id_pelaporan']; ?>"
-               onclick="return confirm('Yakin ingin menghapus data ini?')">
-                <button>Delete</button>
-            </a>
-        </td>
-        <?php } ?>
-
-    </tr>
-
+</tr>
 <?php } ?>
 
 </table>
 
-<br>
+<br><br>
 
-<a href="logout-pengaduan.php">
-    <button>Logout</button>
-</a>
-
-<a href="index.php">
-    <button>Kembali</button>
-</a>
+<a href="logout-pengaduan.php"><button type="button">Logout</button></a>
+<a href="index.php"><button type="button">Kembali</button></a>
 
 </body>
 </html>

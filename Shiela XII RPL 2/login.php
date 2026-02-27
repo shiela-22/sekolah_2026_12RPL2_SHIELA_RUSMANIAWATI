@@ -11,7 +11,7 @@ if(!$conn){
 ========================= */
 if(isset($_GET['logout'])){
     session_destroy();
-    header("Location: login-edit.php");
+    header("Location: index.php");
     exit;
 }
 
@@ -29,6 +29,7 @@ if(isset($_POST['login'])){
     if($data && password_verify($password,$data['password'])){
         $_SESSION['id'] = $data['id'];
         $_SESSION['username'] = $data['username'];
+        $_SESSION['nis'] = $data['nis'] ?? ''; // tambahkan ini supaya tidak null
     }else{
         echo "<script>alert('Login gagal!');</script>";
     }
@@ -112,16 +113,17 @@ button{
 
 <!-- FORM EDIT -->
 <h3>Edit Akun</h3>
-<p>Login sebagai: <b><?= $_SESSION['username']; ?></b></p>
+<p>Login sebagai: <b><?= htmlspecialchars($_SESSION['username']); ?></b></p>
+<p>NIS: <b><?= htmlspecialchars($_SESSION['nis'] ?? ''); ?></b></p>
 
 <form method="POST">
-<input type="text" name="username" value="<?= $_SESSION['username']; ?>" required>
+<input type="text" name="username" value="<?= htmlspecialchars($_SESSION['username']); ?>" required>
 <input type="password" name="password" placeholder="Password baru (opsional)">
 <button type="submit" name="update" class="update-btn">Update</button>
 </form>
 
 <a href="?logout=true">
-<button class="logout-btn">Logout</button>
+<button type="button" class="logout-btn">Logout</button>
 </a>
 
 <?php } ?>

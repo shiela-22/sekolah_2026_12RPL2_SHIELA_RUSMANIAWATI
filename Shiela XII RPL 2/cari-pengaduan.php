@@ -1,9 +1,24 @@
 <?php
-include 'koneksi.php';
+/* =========================
+   KONEKSI DATABASE
+========================= */
+$host = "localhost";
+$user = "root";
+$pass = "";
+$db   = "ujikom_12rpl2_shiela_rusmaniawat";
 
+$koneksi = mysqli_connect($host, $user, $pass, $db);
+
+if (!$koneksi) {
+    die("Koneksi database gagal: " . mysqli_connect_error());
+}
+
+/* =========================
+   PROSES CARI
+========================= */
 $keyword = "";
 $hasil = [];
-$statusList = ["menunggu", "proses", "selesai"];
+$statusList = ["Menunggu", "proses", "selesai"];
 
 if (isset($_GET['cari'])) {
     $keyword = mysqli_real_escape_string($koneksi, $_GET['keyword']);
@@ -27,7 +42,7 @@ if (isset($_GET['cari'])) {
 <style>
 body {
     font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(to right, #c7c1e0, #f3b9cb);
+    background: linear-gradient(to right,#ffb6d9,#ffffff);
     display: flex;
     justify-content: center;
     padding: 50px 0;
@@ -57,9 +72,10 @@ button {
     padding:12px;
     border:none;
     border-radius:8px;
-    background:#f39c12;
+    background:#FADCE9;
     color:#fff;
     font-size:16px;
+    cursor:pointer;
 }
 
 table {
@@ -69,18 +85,18 @@ table {
 }
 
 th, td {
-    border:1px solid #ccc;
+    border:1px solid #cccccc;
     padding:10px;
     text-align:center;
 }
 
 th {
-    background:#3498db;
+    background:#FADCE9;
     color:white;
 }
 
 .detail-btn {
-    background:#2ecc71;
+    background:#FADCE9;
     color:white;
     padding:6px 12px;
     border-radius:6px;
@@ -134,10 +150,7 @@ th {
 <?php $no=1; foreach ($hasil as $h) { ?>
 <tr>
     <td><?= $no++; ?></td>
-
-    <!-- TANGGAL -->
     <td><?= date('d-m-Y', strtotime($h['tanggal'])); ?></td>
-
     <td><?= htmlspecialchars($h['nis']); ?></td>
 
     <td>
@@ -162,16 +175,16 @@ th {
 
     <td>
         <a class="detail-btn"
-           href="detail_pengaduan.php?id=<?= $h['id_pelaporan']; ?>">
+           href="detail-pengaduan.php?id=<?= $h['id_pelaporan']; ?>">
            Detail
         </a>
     </td>
 </tr>
 <?php } ?>
-
 </table>
+
 <?php } else { ?>
-<p style="color:red;text-align:center;">Data tidak ditemukan</p>
+<p style="text-align:center;color:red;">Data tidak ditemukan</p>
 <?php } } ?>
 
 <a href="index.php" class="back-btn">← Kembali</a>

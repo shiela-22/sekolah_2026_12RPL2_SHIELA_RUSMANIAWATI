@@ -1,5 +1,9 @@
 <?php
 session_start();
+
+/* =========================
+   KONEKSI DATABASE
+========================= */
 $conn = mysqli_connect("localhost","root","","ujikom_12rpl2_shiela_rusmaniawat");
 
 if(!$conn){
@@ -11,16 +15,20 @@ if(!$conn){
 ========================= */
 if(isset($_POST['login'])){
 
-    $username = $_POST['username'];
+    $username = mysqli_real_escape_string($conn,$_POST['username']);
     $password = $_POST['password'];
 
     $query = mysqli_query($conn,"SELECT * FROM user WHERE username='$username'");
-    $data = mysqli_fetch_assoc($query);
+    $data  = mysqli_fetch_assoc($query);
 
     if($data && password_verify($password,$data['password'])){
         $_SESSION['id']       = $data['id'];
         $_SESSION['username'] = $data['username'];
         $_SESSION['role']     = $data['role'];
+
+        // 🔥 PENTING (BIAR FORM PENGADUAN BISA DIBUKA)
+        $_SESSION['nis']      = $data['nis'] ?? '';
+
     }else{
         $error = "Username atau Password salah!";
     }
@@ -41,7 +49,7 @@ if(isset($_GET['logout'])){
 <title>Website Pengaduan Mutu</title>
 <style>
 body{
-    font-family: Arial, sans-serif;
+    font-family: Arial;
     background: linear-gradient(to right,#ffb6d9,#ffffff);
     display:flex;
     justify-content:center;
@@ -53,7 +61,7 @@ body{
     background:white;
     padding:40px;
     width:350px;
-    border-radius:10px;
+    border-radius:15px;
     text-align:center;
     box-shadow:0 0 15px rgba(0,0,0,0.2);
 }
@@ -61,35 +69,39 @@ input{
     width:100%;
     padding:10px;
     margin:8px 0;
+    border-radius:5px;
+    border:1px solid #ccc;
 }
 button{
     padding:10px;
     width:100%;
-    background:#ff69b4;
-    color:white;
+    background:#FADCE9;
     border:none;
     cursor:pointer;
-    font-size:16px;
+    font-weight:bold;
+    border-radius:5px;
+}
+button:hover{
+    background:#f8c8dc;
 }
 a.button-link{
     display:block;
     padding:10px;
-    background:#ff69b4;
-    color:#fff;
+    background:#FADCE9;
     text-decoration:none;
     border-radius:5px;
     margin:8px 0;
     font-weight:bold;
+    color:#333;
 }
 a.button-link:hover{
-    background:#e04897;
+    background:#f8c8dc;
 }
 .logout{
-    background:#e74c3c !important;
+    background:#f4a9c7 !important;
 }
 .error{
     color:red;
-    margin-bottom:10px;
 }
 </style>
 </head>
@@ -99,7 +111,6 @@ a.button-link:hover{
 
 <?php if(!isset($_SESSION['id'])){ ?>
 
-    <!-- FORM LOGIN -->
     <h2>Login</h2>
 
     <?php if(isset($error)) echo "<p class='error'>$error</p>"; ?>
@@ -112,7 +123,6 @@ a.button-link:hover{
 
 <?php } else { ?>
 
-    <!-- DASHBOARD -->
     <h2>Selamat Datang</h2>
     <p>Halo, <b><?= htmlspecialchars($_SESSION['username']); ?></b></p>
     <p>Login sebagai: <b><?= strtoupper($_SESSION['role']); ?></b></p>
@@ -120,7 +130,6 @@ a.button-link:hover{
     <?php if($_SESSION['role'] == "admin"){ ?>
         <p><b>Menu Admin:</b></p>
         <a href="data-pengaduan.php" class="button-link">Data Pengaduan</a>
-        <a href="editpassword-pengaduan.php" class="button-link">edit password</a>
         <a href="tampildata.php" class="button-link">Tampil Data</a>
         <a href="datasiswa.php" class="button-link">Data Siswa</a>
         <a href="cari-pengaduan.php" class="button-link">Cari Pengaduan</a>

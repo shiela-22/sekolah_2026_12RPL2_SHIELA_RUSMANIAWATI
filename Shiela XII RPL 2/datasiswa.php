@@ -1,97 +1,50 @@
 <?php
 session_start();
-include 'koneksi.php';
 
-/*
-=========================================
-STRUKTUR DATABASE YANG DIGUNAKAN
-=========================================
+/* ================== KONEKSI DATABASE ================== */
+$koneksi = mysqli_connect("localhost","root","","ujikom_12rpl2_shiela_rusmaniawat");
 
-Tabel input_aspirasi:
-- id_pelaporan
-- nis
-- id_kategori
-- lokasi
-- ket
-- status
-- feedback
+if(!$koneksi){
+    die("Koneksi gagal: " . mysqli_connect_error());
+}
 
-Tabel kategori:
-- id_kategori
-- ket_kategori
-
-Tabel user:
-- id
-- username
-- password
-- role
-- nis
-- kelas
-=========================================
-*/
-
-// =======================
-// CEK SESSION LOGIN
-// =======================
-// Pastikan saat login kamu menyimpan $_SESSION['nis']
-if(!isset($_SESSION['nis'])) {
-    $_SESSION['nis'] = '04'; // contoh sesuai database
+/* ================== CEK LOGIN ================== */
+if(!isset($_SESSION['nis'])){
+    $_SESSION['nis'] = '04'; // contoh sementara
 }
 
 $nis = $_SESSION['nis'];
 
 
-// =======================
-// PROSES SIMPAN PENGADUAN
-// =======================
-if(isset($_POST['submit'])) {
+/* ================== SIMPAN PENGADUAN ================== */
+if(isset($_POST['submit'])){
 
-    $id_kategori = $_POST['id_kategori'];
-    $lokasi      = $_POST['lokasi'];
-    $keterangan  = $_POST['keterangan'];
+    $id_kategori = $_POST['id_kategori'] ?? '';
+    $lokasi      = $_POST['lokasi'] ?? '';
+    $keterangan  = $_POST['keterangan'] ?? '';
 
-    $query_insert = "INSERT INTO input_aspirasi 
-    (
-        nis,
-        id_kategori,
-        lokasi,
-        ket,
-        status,
-        feedback
-    )
-    VALUES
-    (
-        '$nis',
-        '$id_kategori',
-        '$lokasi',
-        '$keterangan',
-        'Menunggu',
-        NULL
-    )";
+    mysqli_query($koneksi,"
+        INSERT INTO input_aspirasi
+        (nis,id_kategori,lokasi,ket,status,feedback)
+        VALUES
+        ('$nis','$id_kategori','$lokasi','$keterangan','Menunggu',NULL)
+    ");
 
-    mysqli_query($koneksi, $query_insert);
-
-    header("Location: pengaduan_siswa.php");
-    exit();
+    header("Location: datasiswa.php");
+    exit;
 }
 
 
-// =======================
-// QUERY DATA PENGADUAN
-// =======================
-$query = mysqli_query($koneksi, "
+/* ================== AMBIL DATA PENGADUAN ================== */
+$query = mysqli_query($koneksi,"
     SELECT 
-        input_aspirasi.id_pelaporan,
-        input_aspirasi.nis,
-        input_aspirasi.id_kategori,
-        input_aspirasi.lokasi,
-        input_aspirasi.ket,
-        input_aspirasi.status,
+        input_aspirasi.*,
         kategori.ket_kategori
     FROM input_aspirasi
-    LEFT JOIN kategori 
+    LEFT JOIN kategori
         ON input_aspirasi.id_kategori = kategori.id_kategori
     WHERE input_aspirasi.nis = '$nis'
+    ORDER BY input_aspirasi.id_pelaporan DESC
 ");
 ?>
 
@@ -141,19 +94,11 @@ $query = mysqli_query($koneksi, "
     <label>Kategori</label>
     <select name="id_kategori" required>
         <option value="">-- Pilih Kategori --</option>
-
         <?php
-        $kategori = mysqli_query($koneksi, "
-            SELECT 
-                id_kategori,
-                ket_kategori
-            FROM kategori
-        ");
-
-        while($data_kategori = mysqli_fetch_assoc($kategori)) {
-            echo "<option value='".$data_kategori['id_kategori']."'>"
-                 .htmlspecialchars($data_kategori['ket_kategori']).
-                 "</option>";
+        $kategori = mysqli_query($koneksi,"SELECT * FROM kategori");
+        while($k = mysqli_fetch_assoc($kategori)){
+            echo "<option value='".htmlspecialchars($k['id_kategori'])."'>"
+                 .htmlspecialchars($k['ket_kategori'])."</option>";
         }
         ?>
     </select>
@@ -165,7 +110,6 @@ $query = mysqli_query($koneksi, "
     <textarea name="keterangan" required></textarea>
 
     <button type="submit" name="submit">Kirim Pengaduan</button>
-
 </form>
 
 
@@ -184,8 +128,9 @@ $query = mysqli_query($koneksi, "
 
 <?php
 $no = 1;
+while($row = mysqli_fetch_assoc($query)){
+    $row = array_map(function($v){ return $v ?? ''; }, $row);
 
-while($row = mysqli_fetch_assoc($query)) {
     echo "<tr>";
     echo "<td>".$no++."</td>";
     echo "<td>".htmlspecialchars($row['id_pelaporan'])."</td>";
@@ -200,8 +145,7 @@ while($row = mysqli_fetch_assoc($query)) {
 
 </table>
 
-<!-- Tombol Kembali dan Logout -->
-<div style="margin-top: 20px;">
+<div style="margin-top:20px;">
     <a href="index.php" class="btn">Kembali</a>
     <a href="logout-pengaduan.php" class="btn btn-logout">Logout</a>
 </div>
