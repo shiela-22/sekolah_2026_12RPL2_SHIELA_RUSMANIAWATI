@@ -74,66 +74,152 @@ if (!$data) {
     exit;
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
 <title>Detail Pengaduan</title>
+
 <style>
-body { font-family: Arial; padding: 20px; max-width: 700px; margin: auto; }
-table { border-collapse: collapse; width: 100%; }
-td { padding: 10px; border: 1px solid #ccc; vertical-align: top; }
-select, textarea { width: 100%; padding: 8px; }
-button { padding: 10px 20px; background: #ffcbe7; color: white; border: none; border-radius: 5px; cursor:pointer; }
-button:hover { background: #ff97d5; }
-a { display: inline-block; margin-top: 15px; text-decoration: none; color: #2980b9; }
+
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    background: #ffe6f0;
+    margin: 0;
+    padding: 40px;
+}
+
+.container{
+    max-width: 700px;
+    margin: auto;
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+h2{
+    text-align: center;
+    color: #d63384;
+}
+
+.role{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+table{
+    width:100%;
+    border-collapse: collapse;
+}
+
+td{
+    padding:10px;
+    border:1px solid #ffc0d9;
+}
+
+tr:nth-child(even){
+    background:#fff0f6;
+}
+
+select, textarea{
+    width:100%;
+    padding:8px;
+    border-radius:5px;
+    border:1px solid #ffc0d9;
+}
+
+textarea{
+    resize:none;
+}
+
+button{
+    background:#ff66a3;
+    color:white;
+    border:none;
+    padding:10px 18px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#e05590;
+}
+
+.kembali{
+    display:inline-block;
+    margin-top:20px;
+    color:#d63384;
+    text-decoration:none;
+    font-weight:bold;
+}
+
 </style>
+
 </head>
 <body>
 
+<div class="container">
+
 <h2>Detail Pengaduan</h2>
-<p><b>Role:</b> <?= htmlspecialchars(ucfirst($role)) ?></p>
+
+<p class="role"><b>Role:</b> <?= htmlspecialchars(ucfirst($role)) ?></p>
 
 <form method="POST">
+
 <table>
+
 <tr>
-    <td><b>ID Pengaduan</b></td>
-    <td><?= htmlspecialchars($data['id_pelaporan']) ?></td>
+<td><b>ID Pengaduan</b></td>
+<td><?= htmlspecialchars($data['id_pelaporan']) ?></td>
 </tr>
+
 <tr>
-    <td><b>Kategori</b></td>
-    <td><?= htmlspecialchars($data['ket_kategori'] ?? '-') ?></td>
+<td><b>Kategori</b></td>
+<td><?= htmlspecialchars($data['ket_kategori'] ?? '-') ?></td>
 </tr>
+
 <tr>
-    <td><b>Lokasi</b></td>
-    <td><?= htmlspecialchars($data['lokasi'] ?? '-') ?></td>
+<td><b>Lokasi</b></td>
+<td><?= htmlspecialchars($data['lokasi'] ?? '-') ?></td>
 </tr>
+
 <tr>
-    <td><b>Keterangan</b></td>
-    <td><?= nl2br(htmlspecialchars($data['ket'] ?? '-')) ?></td>
+<td><b>Keterangan</b></td>
+<td><?= nl2br(htmlspecialchars($data['ket'] ?? '-')) ?></td>
 </tr>
+
 <tr>
-    <td><b>Status</b></td>
-    <td>
-    <?php if ($role == 'admin'): ?>
-        <select name="status" required>
-            <option value="menunggu" <?= ($data['status']=='menunggu')?'selected':'' ?>>Menunggu</option>
-            <option value="proses" <?= ($data['status']=='proses')?'selected':'' ?>>Proses</option>
-            <option value="selesai" <?= ($data['status']=='selesai')?'selected':'' ?>>Selesai</option>
-        </select>
-    <?php else: ?>
-        <?= htmlspecialchars(ucfirst($data['status'] ?? '-')) ?>
-    <?php endif; ?>
-    </td>
+<td><b>Status</b></td>
+<td>
+
+<?php if ($role == 'admin'): ?>
+
+<select name="status" required>
+<option value="menunggu" <?= ($data['status']=='menunggu')?'selected':'' ?>>Menunggu</option>
+<option value="proses" <?= ($data['status']=='proses')?'selected':'' ?>>Proses</option>
+<option value="selesai" <?= ($data['status']=='selesai')?'selected':'' ?>>Selesai</option>
+</select>
+
+<?php else: ?>
+
+<?= htmlspecialchars(ucfirst($data['status'] ?? '-')) ?>
+
+<?php endif; ?>
+
+</td>
 </tr>
 
 <?php if ($role == 'admin'): ?>
+
 <tr>
-    <td><b>Feedback Admin</b></td>
-    <td>
-        <textarea name="feedback" rows="5"><?= htmlspecialchars($data['feedback'] ?? '') ?></textarea>
-    </td>
+<td><b>Feedback Admin</b></td>
+<td>
+<textarea name="feedback" rows="5"><?= htmlspecialchars($data['feedback'] ?? '') ?></textarea>
+</td>
 </tr>
+
 <?php endif; ?>
 
 </table>
@@ -146,7 +232,9 @@ a { display: inline-block; margin-top: 15px; text-decoration: none; color: #2980
 
 </form>
 
-<a href="index.php">← Kembali</a>
+<a href="index.php" class="kembali">← Kembali</a>
+
+</div>
 
 </body>
 </html>

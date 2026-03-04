@@ -52,52 +52,99 @@ if(isset($_POST['update'])){
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Edit Akun</title>
-    <style>
-        body { font-family: Arial; background:#f4f4f4; }
-        .card {
-            width:400px;
-            margin:80px auto;
-            padding:20px;
-            background:white;
-            border-radius:8px;
-            box-shadow:0 0 10px rgba(0,0,0,0.1);
-        }
-        input {
-            width:100%;
-            padding:8px;
-            margin:8px 0;
-        }
-        button {
-            padding:8px 15px;
-            background:#8e7cc3;
-            color:white;
-            border:none;
-            border-radius:4px;
-            cursor:pointer;
-        }
-        button:hover {
-            background:#6f5bb3;
-        }
-    </style>
+<title>Edit Akun</title>
+
+<style>
+
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    background:#ffe6f0;
+    margin:0;
+    padding:40px;
+}
+
+.card{
+    width:420px;
+    margin:auto;
+    padding:25px;
+    background:white;
+    border-radius:10px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.1);
+}
+
+h2{
+    text-align:center;
+    color:#d63384;
+}
+
+label{
+    font-weight:bold;
+    color:#555;
+}
+
+input{
+    width:100%;
+    padding:10px;
+    margin:8px 0 15px 0;
+    border:1px solid #ffc0d9;
+    border-radius:6px;
+}
+
+input:focus{
+    outline:none;
+    border-color:#ff66a3;
+}
+
+button{
+    background:#ff66a3;
+    color:white;
+    border:none;
+    padding:10px 16px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#e05590;
+}
+
+.btn-kembali{
+    display:inline-block;
+    margin-left:10px;
+    padding:10px 16px;
+    background:#ffc0d9;
+    color:#d63384;
+    border-radius:6px;
+    text-decoration:none;
+}
+
+.btn-kembali:hover{
+    background:#ffb3d1;
+}
+
+</style>
+
 </head>
 <body>
 
 <div class="card">
-    <h2>Edit Akun</h2>
 
-    <form method="POST">
-        <label>Username</label>
-        <input type="text" name="username" 
-               value="<?= htmlspecialchars($user['username']); ?>" required>
+<h2>Edit Akun</h2>
 
-        <label>Password Baru (Kosongkan jika tidak ingin ganti)</label>
-        <input type="password" name="password">
+<form method="POST">
 
-        <button type="submit" name="update">Update</button>
-        <a href="index.php" class="btn-kembali">Kembali</a>
+<label>Username</label>
+<input type="text" name="username"
+value="<?= htmlspecialchars($user['username']); ?>" required>
 
-    </form>
+<label>Password Baru (Kosongkan jika tidak ingin ganti)</label>
+<input type="password" name="password">
+
+<button type="submit" name="update">Update</button>
+<a href="index.php" class="btn-kembali">Kembali</a>
+
+</form>
+
 </div>
 
 </body>

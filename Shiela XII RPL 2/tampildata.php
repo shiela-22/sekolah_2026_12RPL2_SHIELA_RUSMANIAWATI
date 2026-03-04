@@ -34,13 +34,73 @@ if (!$query) {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Data Pengaduan</title>
+<title>Data Pengaduan</title>
+
+<style>
+
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    background: #ffe6f0;
+    margin: 0;
+    padding: 30px;
+    text-align: center;
+}
+
+h2{
+    color: #d63384;
+}
+
+table{
+    margin: auto;
+    border-collapse: collapse;
+    width: 90%;
+    background: white;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+th{
+    background: #ff66a3;
+    color: white;
+}
+
+th, td{
+    padding: 10px;
+    border: 1px solid #ffc0d9;
+}
+
+tr:nth-child(even){
+    background: #fff0f6;
+}
+
+button{
+    background: #ff66a3;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+button:hover{
+    background: #e05590;
+}
+
+a{
+    text-decoration: none;
+}
+
+.btn-bawah{
+    margin-top: 20px;
+}
+
+</style>
+
 </head>
 <body>
 
 <h2>Data Pengaduan</h2>
 
-<table border="1" cellpadding="10" cellspacing="0">
+<table>
 <tr>
     <th>No</th>
     <th>ID Kategori</th>
@@ -48,15 +108,16 @@ if (!$query) {
     <th>Lokasi</th>
     <th>Keterangan</th>
     <th>Status</th>
+    <th>Feedback</th>
     <?php if ($role == 'admin') { ?>
         <th>Aksi</th>
     <?php } ?>
 </tr>
 
 <?php while ($data = mysqli_fetch_assoc($query)) { 
-    // cegah NULL (anti deprecated)
     $data = array_map(function($v){ return $v ?? ''; }, $data);
 ?>
+
 <tr>
     <td><?= $no++; ?></td>
     <td><?= htmlspecialchars($data['id_kategori']); ?></td>
@@ -64,6 +125,7 @@ if (!$query) {
     <td><?= htmlspecialchars($data['lokasi']); ?></td>
     <td><?= htmlspecialchars($data['ket']); ?></td>
     <td><?= ucfirst(htmlspecialchars($data['status'])); ?></td>
+    <td><?= ucfirst(htmlspecialchars($data['Feedback'] ?? '')); ?></td>
 
     <?php if ($role == 'admin') { ?>
     <td>
@@ -75,22 +137,24 @@ if (!$query) {
             <button type="button">Edit</button>
         </a>
 
-        <a href="delete-pengaduan.php?id=<?= $data['id_pelaporan']; ?>"
-           onclick="return confirm('Yakin ingin menghapus data ini?')">
+        <a href="delete-pengaduan.php?id=<?= $data['id_pelaporan']; ?>" 
+        onclick="return confirm('Yakin ingin menghapus data ini?')">
             <button type="button">Delete</button>
         </a>
     </td>
     <?php } ?>
 
 </tr>
+
 <?php } ?>
 
 </table>
 
-<br><br>
-
+<div class="btn-bawah">
+<br>
 <a href="logout-pengaduan.php"><button type="button">Logout</button></a>
 <a href="index.php"><button type="button">Kembali</button></a>
+</div>
 
 </body>
 </html>

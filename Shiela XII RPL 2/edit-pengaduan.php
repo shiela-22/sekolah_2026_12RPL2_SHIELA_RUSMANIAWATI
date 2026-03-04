@@ -60,35 +60,78 @@ if (isset($_POST['submit'])) {
 <html>
 <head>
 <title>Edit Pengaduan</title>
+
 <style>
 
 body{
-font-family: Arial;
-background:#f2f2f2;
+font-family: Arial, sans-serif;
+background:#ffe4ec;
+margin:0;
+padding:0;
 }
 
+/* BOX FORM */
+
 .box{
-width:400px;
+width:420px;
 background:white;
-padding:20px;
-margin:100px auto;
-border-radius:8px;
-box-shadow:0 0 10px rgba(0,0,0,0.1);
+padding:25px;
+margin:120px auto;
+border-radius:12px;
+box-shadow:0 8px 20px rgba(0,0,0,0.1);
+border:2px solid #ffc1d6;
 }
+
+h2{
+text-align:center;
+color:#ff4f87;
+margin-bottom:20px;
+}
+
+/* INPUT */
 
 textarea, select{
 width:100%;
-padding:8px;
+padding:10px;
 margin-top:5px;
+border-radius:6px;
+border:1px solid #ffb6c1;
+outline:none;
 }
 
+textarea:focus, select:focus{
+border-color:#ff4f87;
+}
+
+/* BUTTON */
+
 button{
-padding:8px 15px;
-margin-top:10px;
+padding:10px 18px;
+margin-top:15px;
+border:none;
+border-radius:6px;
+background:#ff6fa5;
+color:white;
+font-weight:bold;
 cursor:pointer;
 }
 
+button:hover{
+background:#ff4f87;
+}
+
+/* LINK BUTTON */
+
+a button{
+background:#ffb6c1;
+}
+
+a button:hover{
+background:#ff8fb3;
+}
+
 </style>
+
 </head>
 
 <body>
