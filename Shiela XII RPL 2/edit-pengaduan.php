@@ -14,19 +14,8 @@ if (!isset($_GET['id'])) {
 
 $id = $_GET['id'];
 
-/* ================== CEK KOLOM ================== */
-$cek1 = mysqli_query($koneksi,"SHOW COLUMNS FROM user LIKE 'feedback'");
-if(mysqli_num_rows($cek1)==0){
-    mysqli_query($koneksi,"ALTER TABLE user ADD feedback TEXT");
-}
-
-$cek2 = mysqli_query($koneksi,"SHOW COLUMNS FROM user LIKE 'status'");
-if(mysqli_num_rows($cek2)==0){
-    mysqli_query($koneksi,"ALTER TABLE user ADD status VARCHAR(20)");
-}
-
 /* ================== AMBIL DATA ================== */
-$data = mysqli_query($koneksi, "SELECT * FROM user WHERE id='$id'");
+$data = mysqli_query($koneksi, "SELECT * FROM input_aspirasi WHERE id_pelaporan='$id'");
 $row  = mysqli_fetch_assoc($data);
 
 if (!$row) {
@@ -37,22 +26,32 @@ if (!$row) {
 /* ================== CEGAH NULL ================== */
 $feedback = $row['feedback'] ?? '';
 $status   = $row['status'] ?? '';
+$lokasi   = $row['lokasi'] ?? '';
+$kategori = $row['kategori'] ?? '';
 
 /* ================== UPDATE DATA ================== */
 if (isset($_POST['submit'])) {
 
-    $feedback = $_POST['feedback'] ?? '';
-    $status   = $_POST['status'] ?? '';
+    $feedback = $_POST['feedback'];
+    $status   = $_POST['status'];
+    $lokasi   = $_POST['lokasi'];
+    $kategori = $_POST['kategori'];
 
-    mysqli_query($koneksi,"
-        UPDATE user 
+    $update = mysqli_query($koneksi,"
+        UPDATE input_aspirasi 
         SET feedback='$feedback',
-            status='$status'
-        WHERE id='$id'
+            status='$status',
+            lokasi='$lokasi',
+            kategori='$kategori'
+        WHERE id_pelaporan='$id'
     ");
 
-    header("Location: index.php");
-    exit;
+    if($update){
+        header("Location: tampildata.php");
+        exit;
+    }else{
+        echo "Gagal update data";
+    }
 }
 ?>
 
@@ -63,71 +62,72 @@ if (isset($_POST['submit'])) {
 
 <style>
 
+/* BACKGROUND */
 body{
-font-family: Arial, sans-serif;
-background:#ffe4ec;
+font-family: 'Segoe UI', sans-serif;
+background: linear-gradient(to right,#ffd6e7,#fff0f6);
 margin:0;
 padding:0;
 }
 
 /* BOX FORM */
-
 .box{
 width:420px;
 background:white;
-padding:25px;
-margin:120px auto;
-border-radius:12px;
-box-shadow:0 8px 20px rgba(0,0,0,0.1);
-border:2px solid #ffc1d6;
+padding:30px;
+margin:100px auto;
+border-radius:18px;
+box-shadow:0 10px 25px rgba(255,105,180,0.2);
+border:3px solid #ffc1da;
 }
 
+/* JUDUL */
 h2{
 text-align:center;
-color:#ff4f87;
+color:#ff4f9a;
 margin-bottom:20px;
 }
 
 /* INPUT */
-
-textarea, select{
+textarea, select, input{
 width:100%;
 padding:10px;
 margin-top:5px;
-border-radius:6px;
-border:1px solid #ffb6c1;
+border-radius:8px;
+border:1px solid #ffc1da;
 outline:none;
+font-size:14px;
 }
 
-textarea:focus, select:focus{
-border-color:#ff4f87;
+textarea:focus, select:focus, input:focus{
+background:#fff0f6;
+border-color:#ff8fc1;
 }
 
 /* BUTTON */
-
 button{
 padding:10px 18px;
 margin-top:15px;
 border:none;
-border-radius:6px;
-background:#ff6fa5;
+border-radius:10px;
+background:#ff8fc1;
 color:white;
 font-weight:bold;
 cursor:pointer;
+transition:0.2s;
 }
 
 button:hover{
-background:#ff4f87;
+background:#ff6fa5;
 }
 
-/* LINK BUTTON */
-
+/* BUTTON KEMBALI */
 a button{
-background:#ffb6c1;
+background:#ffb3d1;
 }
 
 a button:hover{
-background:#ff8fb3;
+background:#ff9cc6;
 }
 
 </style>
@@ -138,9 +138,24 @@ background:#ff8fb3;
 
 <div class="box">
 
-<h2>Update Status Pengaduan</h2>
+<h2>Update Status Pengaduan 💕</h2>
 
 <form method="POST">
+
+Lokasi:<br>
+<input type="text" name="lokasi" value="<?= htmlspecialchars($lokasi); ?>">
+
+<br><br>
+
+Kategori:<br>
+<select name="kategori">
+<option value="jalan" <?= $kategori=="jalan"?"selected":""; ?>>Kerusakan Jalan</option>
+<option value="lampu" <?= $kategori=="lampu"?"selected":""; ?>>Lampu Jalan</option>
+<option value="sampah" <?= $kategori=="sampah"?"selected":""; ?>>Sampah</option>
+<option value="lainnya" <?= $kategori=="lainnya"?"selected":""; ?>>Lainnya</option>
+</select>
+
+<br><br>
 
 Feedback:<br>
 <textarea name="feedback" rows="4"><?= htmlspecialchars($feedback); ?></textarea>
@@ -157,7 +172,7 @@ Status:<br>
 <br><br>
 
 <button type="submit" name="submit">Update</button>
-<a href="index.php"><button type="button">Kembali</button></a>
+<a href="tampildata.php"><button type="button">Kembali</button></a>
 
 </form>
 
